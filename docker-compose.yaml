@@ -7,6 +7,14 @@ services:
     volumes:
       - maven-repo:/root/.m2/repository
       - ./backend:/app
+  db:
+    image: postgres:alpine3.18
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: demo-ecommerce
+    volumes:
+      - pg-data:/var/lib/postgresql/data
 
 volumes:
   maven-repo:
+  pg-data:
