@@ -1,0 +1,12 @@
+version: "3.1"
+services:
+  mvn:
+    image: maven:3.9
+    entrypoint: mvn
+    working_dir: /app
+    volumes:
+      - maven-repo:/root/.m2/repository
+      - ./backend:/app
+
+volumes:
+  maven-repo:
