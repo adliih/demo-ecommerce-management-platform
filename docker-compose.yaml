@@ -7,6 +7,17 @@ services:
     volumes:
       - maven-repo:/root/.m2/repository
       - ./backend:/app
+
+  app:
+    image: maven:3.9
+    working_dir: /app
+    volumes:
+      - maven-repo:/root/.m2/repository
+      - ./backend:/app
+    ports:
+      - "8080:8080"
+    command: ["mvn", "spring-boot:run"]
+
   db:
     image: postgres:alpine3.18
     environment:
