@@ -1,0 +1,27 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "demo-ecommerce"
+client_id = "0c12736222cb5677e43e6e83b9ce4c0d"
+application_url = "https://endangered-contain-formats-lazy.trycloudflare.com"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products"
+
+[auth]
+redirect_urls = [
+  "https://endangered-contain-formats-lazy.trycloudflare.com/auth/callback",
+  "https://endangered-contain-formats-lazy.trycloudflare.com/auth/shopify/callback",
+  "https://endangered-contain-formats-lazy.trycloudflare.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2023-07"
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "quickstart-0769bc85.myshopify.com"
