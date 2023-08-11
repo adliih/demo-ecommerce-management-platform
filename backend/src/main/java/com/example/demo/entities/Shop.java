@@ -20,6 +20,7 @@ public class Shop {
   private Long id;
   @Column(unique = true)
   private String uniqueKey;
+  private String providerShopId;
 
   private String name;
 

@@ -19,6 +19,7 @@ public class Variant {
   private Long id;
   @Column(unique = true)
   private String uniqueKey;
+  private String providerVariantId;
 
   private String title;
   private Double price;

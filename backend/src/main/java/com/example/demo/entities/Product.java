@@ -21,9 +21,8 @@ public class Product {
   private Long id;
   @Column(unique = true)
   private String uniqueKey;
-
-  private String name;
-
+  private String providerProductId;
+  private String title;
   @ManyToOne
   @JoinColumn(name = "shop_id")
   private Shop shop;
