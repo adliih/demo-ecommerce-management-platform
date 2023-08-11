@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-public class ProductVariant {
+public class ShopifyVariant {
     public Long id;
 
     @JsonProperty("product_id")

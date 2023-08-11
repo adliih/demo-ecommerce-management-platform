@@ -77,7 +77,7 @@ public class ShopifyService implements ProviderService {
                 .build();
     }
 
-    private Variant toVariant(ProductVariant variant) {
+    private Variant toVariant(ShopifyVariant variant) {
         return Variant.builder()
                 .providerVariantId(variant.id.toString())
                 .uniqueKey(UNIQUE_KEY_PREFIX + variant.id)
