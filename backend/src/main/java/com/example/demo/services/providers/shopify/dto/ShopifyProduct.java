@@ -1,6 +1,6 @@
 package com.example.demo.services.providers.shopify.dto;
 
-public class Product {
+public class ShopifyProduct {
   public Long id;
   public String title;
   public ProductVariant[] variants;
