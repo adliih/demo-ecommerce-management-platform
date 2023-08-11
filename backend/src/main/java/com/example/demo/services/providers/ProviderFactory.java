@@ -12,15 +12,18 @@ public class ProviderFactory {
   @Autowired
   private ShopifyService shopifyService;
 
-  public ProviderService getProvider(String name) throws Exception {
-    ProviderName providerName = ProviderName.valueOf(name);
-
+  public ProviderService getProvider(ProviderName providerName) throws Exception {
     switch (providerName) {
       case SHOPIFY:
         return shopifyService;
       default:
-        throw new Exception("Unregistered provider: " + name);
+        throw new Exception("Unregistered provider: " + providerName);
     }
+  }
+
+  public ProviderService getProvider(String name) throws Exception {
+    ProviderName providerName = ProviderName.valueOfName(name);
+    return getProvider(providerName);
 
   }
 }
