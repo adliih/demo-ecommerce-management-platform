@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
@@ -13,20 +13,19 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "providerId", "providerShopId" }))
 public class Shop {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  @Column(unique = true)
+  private String uniqueKey;
 
   private String name;
 
   @ManyToOne
   @JoinColumn(name = "provider_id")
   private Provider provider;
-
-  private String providerShopId;
 
   @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Product> products;

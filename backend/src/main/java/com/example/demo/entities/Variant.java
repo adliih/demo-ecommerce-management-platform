@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -14,7 +12,7 @@ import jakarta.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class Variant {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,12 +20,12 @@ public class Product {
   @Column(unique = true)
   private String uniqueKey;
 
-  private String name;
+  private String title;
+  private Double price;
+  private String sku;
 
   @ManyToOne
-  @JoinColumn(name = "shop_id")
-  private Shop shop;
+  @JoinColumn(name = "product_id")
+  private Product product;
 
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Variant> variants;
 }
