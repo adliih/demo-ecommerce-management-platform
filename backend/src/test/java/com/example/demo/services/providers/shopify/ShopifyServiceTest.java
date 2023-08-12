@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.demo.entities.Product;
+import com.example.demo.entities.Shop;
 
 @SpringBootTest
 class ShopifyServiceTest {
@@ -19,10 +20,16 @@ class ShopifyServiceTest {
     @Test
     void testProducts() throws Exception {
 
-        // Call the method
         List<Product> products = shopifyService.products();
 
-        // Assert the result
         assertNotNull(products);
+    }
+
+    @Test
+    void testShop() throws Exception {
+
+        Shop shop = shopifyService.shop();
+
+        assertNotNull(shop);
     }
 }
