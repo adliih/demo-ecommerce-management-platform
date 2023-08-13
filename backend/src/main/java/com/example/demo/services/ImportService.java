@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.entities.Provider;
 import com.example.demo.entities.Shop;
+import com.example.demo.entities.Variant;
 import com.example.demo.entities.Product;
 import com.example.demo.repositories.ProductRepository;
 import com.example.demo.repositories.ProviderRepository;
 import com.example.demo.repositories.ShopRepository;
+import com.example.demo.repositories.VariantRepository;
 import com.example.demo.services.providers.ProviderFactory;
 import com.example.demo.services.providers.ProviderService;
 
@@ -33,6 +38,9 @@ public class ImportService {
 
   @Autowired
   private ProductRepository productRepository;
+
+  @Autowired
+  private VariantRepository variantRepository;
 
   public void importProviderData() throws Exception {
     // Find all providers from the database
@@ -54,9 +62,20 @@ public class ImportService {
       Shop updatedShop = transformShop(provider, existingShop, shop);
       List<Product> updatedProducts = transformProducts(updatedShop, existingProducts, products);
 
+      // Extract the variants
+      List<Variant> existingVariants = existingProducts.stream()
+          .flatMap(product -> product.getVariants().stream())
+          .toList();
+      List<Variant> externalVariants = updatedProducts.stream()
+          .flatMap(product -> product.getVariants().stream())
+          .toList();
+
+      List<Variant> updatedVariants = transformVariants(existingVariants, externalVariants);
+
       // Persist the transformed data into your database
       shopRepository.insertOnConflictDoUpdate(Arrays.asList(updatedShop));
       productRepository.insertOnConflictDoUpdate(updatedProducts);
+      variantRepository.insertOnConflictDoUpdate(updatedVariants);
     }
   }
 
@@ -87,11 +106,41 @@ public class ImportService {
 
       Product existingProduct = existingProductMap.get(externalProduct.getUniqueKey());
       if (existingProduct != null) {
-        updatedProductBuilder.id(existingProduct.getId());
+        UUID productId = existingProduct.getId();
+        updatedProductBuilder.id(productId);
+
+        // readjust any of variant productId
+        List<Variant> adjustedVariants = externalProduct.getVariants().stream().map(v -> {
+          return v.toBuilder().productId(productId).build();
+        }).toList();
+        updatedProductBuilder.variants(adjustedVariants);
       }
       products.add(updatedProductBuilder.build());
     }
 
     return products;
   }
+
+  private List<Variant> transformVariants(List<Variant> existingVariants, List<Variant> externalVariants) {
+    Map<String, Variant> existingVariantMap = existingVariants.stream()
+        .collect(Collectors.toMap(Variant::getUniqueKey, Function.identity()));
+
+    List<Variant> transformedVariants = new ArrayList<>();
+
+    for (Variant externalVariant : externalVariants) {
+      Variant existingVariant = existingVariantMap.get(externalVariant.getUniqueKey());
+      Variant.VariantBuilder transformedVariantBuilder = externalVariant
+          .toBuilder();
+
+      if (existingVariant != null) {
+        // Assign existing variant id
+        transformedVariantBuilder.id(existingVariant.getId());
+      }
+
+      transformedVariants.add(externalVariant);
+    }
+
+    return transformedVariants;
+  }
+
 }

@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Variant {
@@ -27,8 +27,11 @@ public class Variant {
   private Double price;
   private String sku;
 
+  @Column(name = "product_id")
+  private UUID productId;
+
   @ManyToOne
-  @JoinColumn(name = "product_id")
+  @JoinColumn(name = "product_id", insertable = false, updatable = false)
   private Product product;
 
 }

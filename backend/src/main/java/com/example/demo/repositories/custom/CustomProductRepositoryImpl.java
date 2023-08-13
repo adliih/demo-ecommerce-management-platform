@@ -1,4 +1,4 @@
-package com.example.demo.repositories;
+package com.example.demo.repositories.custom;
 
 import java.sql.PreparedStatement;
 import java.util.List;
