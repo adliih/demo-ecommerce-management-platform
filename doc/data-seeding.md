@@ -1,5 +1,5 @@
 ```sql
-INSERT INTO provider ("unique_key", "name")
-VALUES ('Shopify', 'Shopify')
+INSERT INTO provider ("id", "unique_key", "name")
+VALUES (gen_random_uuid (), 'Shopify', 'Shopify')
 ON conflict DO NOTHING;
 ```

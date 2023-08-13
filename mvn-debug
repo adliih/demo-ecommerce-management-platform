@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+PORT=5005
+MAVEN_SUREFIRE_DEBUG="-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=*:$PORT"
+docker-compose run --rm -p $PORT:$PORT mvn -Dmaven.surefire.debug="$MAVEN_SUREFIRE_DEBUG" $@

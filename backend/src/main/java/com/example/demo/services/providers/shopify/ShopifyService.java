@@ -6,6 +6,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.HttpClient;
@@ -50,6 +51,7 @@ public class ShopifyService implements ProviderService {
             {
                 shop {
                     name
+                    id
                 }
             }
             """;
@@ -91,6 +93,9 @@ public class ShopifyService implements ProviderService {
 
     private Shop toShop(ShopifyShop shop) {
         return Shop.builder()
+                .id(UUID.randomUUID())
+                .uniqueKey(UNIQUE_KEY_PREFIX + shop.id)
+                .providerShopId(shop.id)
                 .name(shop.name)
                 .build();
     }
@@ -134,6 +139,7 @@ public class ShopifyService implements ProviderService {
 
     private Product toProduct(ShopifyProduct p) {
         return Product.builder()
+                .id(UUID.randomUUID())
                 .providerProductId(p.id.toString())
                 .uniqueKey(UNIQUE_KEY_PREFIX + p.id)
                 .title(p.title)
@@ -143,6 +149,7 @@ public class ShopifyService implements ProviderService {
 
     private Variant toVariant(ShopifyVariant variant) {
         return Variant.builder()
+                .id(UUID.randomUUID())
                 .providerVariantId(variant.id.toString())
                 .uniqueKey(UNIQUE_KEY_PREFIX + variant.id)
                 .price(variant.price.doubleValue())
