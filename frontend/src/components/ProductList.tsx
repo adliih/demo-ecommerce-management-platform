@@ -11,8 +11,16 @@ function ProductList() {
     shopifyService.fetchProducts().then(setData);
   }, []);
 
+  if (!data) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <span className="loading loading-bars loading-lg"></span>
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="flex flex-wrap py-4 gap-4 justify-center">
       {data?.data.products.edges.map(({ node }) => (
         <ProductCard
           key={node.id}

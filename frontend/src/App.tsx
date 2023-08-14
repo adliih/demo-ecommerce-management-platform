@@ -3,7 +3,7 @@ import ProductList from "./components/ProductList";
 
 function App() {
   return (
-    <div className="container m-auto py-4 ">
+    <div className="container mx-auto">
       <ProductList />
     </div>
   );
