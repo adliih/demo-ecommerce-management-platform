@@ -21,14 +21,21 @@ function ProductList() {
 
   return (
     <div className="flex flex-wrap py-4 gap-4 justify-center">
-      {data?.data.products.edges.map(({ node }) => (
-        <ProductCard
-          key={node.id}
-          description={node.description}
-          imgUrl={node.images.edges.length ? node.images.edges[0].node.url : ""}
-          title={node.title}
-        />
-      ))}
+      {data?.data.products.edges.map(({ node }) => {
+        const variant = node.variants.edges[0];
+        return (
+          <ProductCard
+            key={node.id}
+            description={node.description}
+            imgUrl={
+              node.images.edges.length ? node.images.edges[0].node.url : ""
+            }
+            title={node.title}
+            priceAmount={variant.node.price.amount}
+            priceCurrency={variant.node.price.currencyCode}
+          />
+        );
+      })}
     </div>
   );
 }

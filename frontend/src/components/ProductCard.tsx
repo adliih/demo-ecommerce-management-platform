@@ -4,12 +4,16 @@ interface ProductCardProps {
   imgUrl: string;
   title: string;
   description: string;
+  priceAmount: string;
+  priceCurrency: string;
 }
 
 export default function ProductCard({
   description,
   imgUrl,
   title,
+  priceAmount,
+  priceCurrency,
 }: ProductCardProps) {
   return (
     <div>
@@ -20,7 +24,10 @@ export default function ProductCard({
         <div className="card-body">
           <h2 className="card-title">{title}!</h2>
           <p>{description}</p>
-          <div className="card-actions justify-end">
+          <div className="card-actions justify-evenly items-center">
+            <p className="text-xl text-accent">
+              {priceCurrency} {priceAmount}
+            </p>
             <button className="btn btn-primary">Buy Now</button>
           </div>
         </div>
