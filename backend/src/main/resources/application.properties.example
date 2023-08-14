@@ -9,3 +9,9 @@ spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialec
 
 # Hibernate ddl auto (create, create-drop, validate, update)
 spring.jpa.hibernate.ddl-auto = update
+
+shopify.api.shop-domain=
+shopify.api.admin-access-token=
+
+stripe.auth.publishableKey=
+stripe.auth.secretKey=
