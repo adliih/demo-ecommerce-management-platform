@@ -59,7 +59,7 @@ docker-compose up -d db app
 
 ## Custom Storefront Frontend
 
-copy and adjust .env, example can be found at [.env](frontend/.env)
+copy and adjust .env, example can be found at [.env.example](frontend/.env.example)
 
 ```
 npm i --prefix frontend
