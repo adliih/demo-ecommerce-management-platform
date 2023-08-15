@@ -35,3 +35,14 @@ export interface ProductsData {
     };
   };
 }
+
+export interface CreateCheckoutData {
+  data: {
+    checkoutCreate: {
+      checkout: {
+        id: string;
+        webUrl: string;
+      };
+    };
+  };
+}

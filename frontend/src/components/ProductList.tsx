@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import { ProductsData, ShopifyService } from "../lib/shopify";
-
-const shopifyService = new ShopifyService();
+import { ProductsData, shopifyService } from "../lib/shopify";
+import Loading from "./Loading";
 
 function ProductList() {
   const [data, setData] = useState<ProductsData>();
@@ -14,7 +13,7 @@ function ProductList() {
   if (!data) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <span className="loading loading-bars loading-lg"></span>
+        <Loading />
       </div>
     );
   }
@@ -33,6 +32,7 @@ function ProductList() {
             title={node.title}
             priceAmount={variant.node.price.amount}
             priceCurrency={variant.node.price.currencyCode}
+            variantId={variant.node.id}
           />
         );
       })}

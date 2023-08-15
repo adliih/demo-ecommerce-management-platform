@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import { shopifyService } from "../lib/shopify";
+import Loading from "./Loading";
 
 interface ProductCardProps {
   imgUrl: string;
@@ -6,6 +8,7 @@ interface ProductCardProps {
   description: string;
   priceAmount: string;
   priceCurrency: string;
+  variantId: string;
 }
 
 export default function ProductCard({
@@ -14,7 +17,27 @@ export default function ProductCard({
   title,
   priceAmount,
   priceCurrency,
+  variantId,
 }: ProductCardProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCheckout = async () => {
+    setIsLoading(true);
+    try {
+      // TODO make quantity as parameter
+      const quantity = 1;
+
+      const checkoutData = await shopifyService.createCheckout(
+        variantId,
+        quantity
+      );
+      window.location.href = checkoutData.data.checkoutCreate.checkout.webUrl;
+    } catch (error) {
+      console.error("Error creating checkout", error);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div>
       <div className="card w-96 bg-base-100 shadow-xl">
@@ -28,7 +51,15 @@ export default function ProductCard({
             <p className="text-xl text-accent">
               {priceCurrency} {priceAmount}
             </p>
-            <button className="btn btn-primary">Buy Now</button>
+            {isLoading ? (
+              <button className="btn btn-primary">
+                <Loading />
+              </button>
+            ) : (
+              <button className="btn btn-primary" onClick={handleCheckout}>
+                Buy Now
+              </button>
+            )}
           </div>
         </div>
       </div>

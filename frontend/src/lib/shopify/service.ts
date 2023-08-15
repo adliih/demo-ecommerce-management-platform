@@ -1,4 +1,4 @@
-import { ProductsData } from ".";
+import { CreateCheckoutData, ProductsData } from ".";
 
 export class ShopifyService {
   private shopName: string;
@@ -9,6 +9,30 @@ export class ShopifyService {
     this.shopName = import.meta.env.VITE_SHOP_NAME;
     this.accessToken = import.meta.env.VITE_ACCESS_TOKEN;
     this.baseUrl = `https://${this.shopName}.myshopify.com/api/2023-07/graphql.json`;
+  }
+
+  private async executeGql<T>(
+    query: string,
+    variables: object | undefined = undefined
+  ): Promise<T> {
+    const response = await fetch(this.baseUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Storefront-Access-Token": this.accessToken,
+      },
+      body: JSON.stringify({ query, variables }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to call graphql");
+    }
+
+    const json = await response.json();
+
+    console.trace(`GraphQL Result`, json);
+
+    return json;
   }
 
   async fetchProducts(): Promise<ProductsData> {
@@ -45,21 +69,35 @@ export class ShopifyService {
     }
     `;
 
-    const response = await fetch(this.baseUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Shopify-Storefront-Access-Token": this.accessToken,
-      },
-      body: JSON.stringify({ query }),
-    });
+    return this.executeGql(query);
+  }
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch products");
+  async createCheckout(
+    variantId: string,
+    quantity: number
+  ): Promise<CreateCheckoutData> {
+    const mutation = `
+    mutation ($input: CheckoutCreateInput!) {
+      checkoutCreate(input: $input) {
+        checkout {
+          id
+          webUrl
+        }
+      }
     }
-
-    const data = await response.json();
-    console.trace(`Got products`, data);
-    return data;
+    `;
+    const variables = {
+      input: {
+        lineItems: [
+          {
+            variantId,
+            quantity,
+          },
+        ],
+      },
+    };
+    return this.executeGql(mutation, variables);
   }
 }
+
+export const shopifyService = new ShopifyService();
